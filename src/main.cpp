@@ -1,24 +1,35 @@
 #include <iostream>
 #include <string>
 
+#include "Command.h"
+#include "CommandParser.h"
+
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
-  std::string command;
+  std::string input;
+  CommandParser commandParser;
+  int result = 0;
+  Command* command = nullptr;
+  CommandType commandType = CommandType::UNKNOWN;
 
   do
   {
       std::cout << "$ ";
 
-      std::cin >> command;
+      std::cin >> input;
 
-      if (!command.empty())
+      if (!input.empty())
       {
-          std::cout << command << ": command not found" << std::endl;
+          command = commandParser.getCommand(input);
+          commandType = command->getType();
+          result = command->execute();
+          delete command;
+          command = nullptr;
       }
-  } while (true);
+  } while (commandType != CommandType::EXIT);
 
-  return 0;
+  return result;
 }

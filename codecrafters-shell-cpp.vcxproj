@@ -19,7 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Command.cpp" />
+    <ClCompile Include="src\CommandParser.cpp" />
+    <ClCompile Include="src\ExitCommand.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\UnknownCommand.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Command.h" />
+    <ClInclude Include="include\CommandParser.h" />
+    <ClInclude Include="include\CommandType.h" />
+    <ClInclude Include="include\ExitCommand.h" />
+    <ClInclude Include="include\UnknownCommand.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -106,6 +120,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
