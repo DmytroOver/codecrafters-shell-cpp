@@ -6,14 +6,19 @@ int main() {
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
-  std::cout << "$ ";
-
   std::string command;
-  
-  std::cin >> command;
 
-  if (!command.empty())
+  do
   {
-    std::cout << command << ": command not found" << std::endl;
-  }
+      std::cout << "$ ";
+
+      std::cin >> command;
+
+      if (!command.empty())
+      {
+          std::cout << command << ": command not found" << std::endl;
+      }
+  } while (true);
+
+  return 0;
 }
