@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\Command.cpp" />
     <ClCompile Include="src\CommandParser.cpp" />
+    <ClCompile Include="src\EchoCommand.cpp" />
     <ClCompile Include="src\ExitCommand.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\UnknownCommand.cpp" />
@@ -29,6 +30,7 @@
     <ClInclude Include="include\Command.h" />
     <ClInclude Include="include\CommandParser.h" />
     <ClInclude Include="include\CommandType.h" />
+    <ClInclude Include="include\EchoCommand.h" />
     <ClInclude Include="include\ExitCommand.h" />
     <ClInclude Include="include\UnknownCommand.h" />
   </ItemGroup>

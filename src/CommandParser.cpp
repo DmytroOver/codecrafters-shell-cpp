@@ -4,6 +4,7 @@
 #include "Command.h"
 #include "ExitCommand.h"
 #include "UnknownCommand.h"
+#include "EchoCommand.h"
 
 Command* CommandParser::getCommand(const std::string& input) const
 {
@@ -25,6 +26,19 @@ Command* CommandParser::getCommand(const std::string& input) const
 	{
 		int code = tokens.size() > 1 ? std::atoi(tokens[1].c_str()) : 0;
 		return new ExitCommand(code);
+	}
+	else if (commandStr == "echo")
+	{
+		std::string output = "";
+		for (int i = 1; i < tokens.size(); i++)
+		{
+			if (!tokens[i].empty())
+			{
+				output += tokens[i] + ' ';
+			}
+		}
+		output[output.size() - 1] = '\0';
+		return new EchoCommand(output);
 	}
 
 	return new UnknownCommand(input);
