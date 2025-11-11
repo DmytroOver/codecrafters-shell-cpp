@@ -19,7 +19,7 @@ int main() {
   {
       std::cout << "$ ";
 
-      std::getline(std::cin >> std::ws, input);
+      std::getline(std::cin, input);
 
       if (!input.empty())
       {
