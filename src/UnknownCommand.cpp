@@ -7,17 +7,6 @@ UnknownCommand::UnknownCommand(const std::vector<std::string>& params) :
 
 int UnknownCommand::execute() const
 {
-	std::string output = "";
-	bool skip = true;
-	for (const auto& param : m_params)
-	{
-		if (skip)
-		{
-			skip = false;
-			continue;
-		}
-		output += param + ' ';
-	}
-	std::cout << output << ": command not found" << std::endl;
+	std::cout << m_params[0] << ": command not found" << std::endl;
 	return -1;
 }
