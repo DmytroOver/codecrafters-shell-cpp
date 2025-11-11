@@ -12,7 +12,7 @@ int main() {
   std::string input;
   CommandParser commandParser;
   int result = 0;
-  Command* command = nullptr;
+  std::unique_ptr<Command> command = nullptr;
   CommandType commandType = CommandType::UNKNOWN;
 
   do
@@ -26,8 +26,6 @@ int main() {
           command = commandParser.getCommand(input);
           commandType = command->getType();
           result = command->execute();
-          delete command;
-          command = nullptr;
       }
   } while (commandType != CommandType::EXIT);
 

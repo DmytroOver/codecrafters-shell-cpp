@@ -1,13 +1,11 @@
 #pragma once
 #include "Command.h"
-#include <string>
 
 class EchoCommand :
     public Command
 {
-    std::string m_output;
 public:
-    EchoCommand(const std::string& output);
+    EchoCommand(const std::vector<std::string>& params);
     int execute() const override;
 };
 

@@ -3,9 +3,8 @@
 class ExitCommand :
     public Command
 {
-    int m_code;
 public:
-    ExitCommand(int code);
+    ExitCommand(const std::vector<std::string>& params);
     int execute() const override;
 };
 
