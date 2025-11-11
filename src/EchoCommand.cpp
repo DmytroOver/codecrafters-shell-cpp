@@ -1,5 +1,6 @@
 #include "EchoCommand.h"
 #include <iostream>
+#include <ranges>
 
 EchoCommand::EchoCommand(const std::vector<std::string>& params):
 	Command(CommandType::ECHO, params)
@@ -8,14 +9,8 @@ EchoCommand::EchoCommand(const std::vector<std::string>& params):
 int EchoCommand::execute() const
 {
 	std::string output = "";
-	bool skip = true;
-	for (const auto& param : m_params)
+	for (const auto& param : m_params | std::views::drop(1))
 	{
-		if (skip)
-		{
-			skip = false;
-			continue;
-		}
 		output += param + ' ';
 	}
 	std::cout << output << std::endl;
