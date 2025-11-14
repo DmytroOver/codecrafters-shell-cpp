@@ -10,6 +10,10 @@ int CdCommand::execute() const
 {
 	int errorCode = 0;
 	std::string path = m_params.size() > 1 ? m_params[1] : "";
+	if (path == "~")
+	{
+		path = std::getenv("HOME");
+	}
 	errorCode = FileSystemHelper::getInstance()->changePath(path);
 	if (errorCode)
 	{

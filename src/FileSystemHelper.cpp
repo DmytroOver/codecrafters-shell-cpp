@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include "FileSystemHelper.h"
 #include <cstdlib>
 #include <filesystem>
