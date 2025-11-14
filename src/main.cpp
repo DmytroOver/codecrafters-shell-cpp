@@ -24,8 +24,11 @@ int main() {
       if (!input.empty())
       {
           command = commandParser.getCommand(input);
-          commandType = command->getType();
-          result = command->execute();
+          if (command != nullptr)
+          {
+              commandType = command->getType();
+              result = command->execute();
+          }
       }
   } while (commandType != CommandType::EXIT);
 

@@ -1,6 +1,7 @@
 #include "CommandParser.h"
 #include <vector>
 #include <sstream>
+#include "FileSystemHelper.h"
 #include "Command.h"
 #include "ExitCommand.h"
 #include "UnknownCommand.h"
@@ -29,19 +30,28 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 		}
 	}
 
-	if (!tokens.empty())
+	if (tokens.empty())
 	{
-		auto it = s_commands.find(tokens[0]);
-		if (it != s_commands.end())
-		{
-			command = it->second;
-		}
+		return nullptr;
+	}
+
+	auto it = s_commands.find(tokens[0]);
+	if (it != s_commands.end())
+	{
+		command = it->second;
 	}
 
 	if (command != CommandType::UNKNOWN)
 	{
 		commandCreator = s_commandCreators.at(command);
 		return commandCreator(tokens);
+	}
+
+	std::string exePath = FileSystemHelper::getInstance()->findExePath(tokens[0]);
+	if (!exePath.empty())
+	{
+		system(input.c_str());
+		return nullptr;
 	}
 
 	return commandCreator(tokens);
