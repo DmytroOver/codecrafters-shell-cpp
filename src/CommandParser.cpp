@@ -38,10 +38,11 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 		}
 	}
 
-	auto it = s_commandCreators.find(command);
-	if (it != s_commandCreators.end())
+	if (command != CommandType::UNKNOWN)
 	{
-		commandCreator = it->second;
+		commandCreator = s_commandCreators.at(command);
+		return commandCreator(tokens);
 	}
+
 	return commandCreator(tokens);
 }
