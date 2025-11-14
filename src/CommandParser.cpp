@@ -7,11 +7,13 @@
 #include "UnknownCommand.h"
 #include "EchoCommand.h"
 #include "TypeCommand.h"
+#include "PwdCommand.h"
 
 const CommandsMap CommandParser::s_commandCreators = {
 	{CommandType::EXIT, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<ExitCommand>(params); }},
 	{CommandType::ECHO, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<EchoCommand>(params); }},
 	{CommandType::TYPE, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<TypeCommand>(params); }},
+	{CommandType::PWD, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<PwdCommand>(params); }},
 	{CommandType::UNKNOWN, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<UnknownCommand>(params); }}
 };
 

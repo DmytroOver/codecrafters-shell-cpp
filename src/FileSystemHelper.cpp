@@ -56,3 +56,8 @@ std::string FileSystemHelper::findExePath(const std::string& name) const
 
 	return "";
 }
+
+std::string FileSystemHelper::getPwd() const
+{
+	return fs::current_path().string();
+}

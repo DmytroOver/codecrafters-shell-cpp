@@ -18,5 +18,6 @@ public:
 	static FileSystemHelper* getInstance();
 
 	std::string findExePath(const std::string& name) const;
+	std::string getPwd() const;
 };
 
