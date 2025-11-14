@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <sstream>
+#include <system_error>
 
 namespace fs = std::filesystem;
 
@@ -59,5 +60,17 @@ std::string FileSystemHelper::findExePath(const std::string& name) const
 
 std::string FileSystemHelper::getPwd() const
 {
-	return fs::current_path().string();
+	std::error_code error;
+	fs::path path = fs::current_path(error);
+	if (!error)
+	{
+		return path.string();
+	}
+}
+
+int FileSystemHelper::changePath(const std::string& path) const
+{
+	std::error_code error;
+	fs::current_path(path, error);
+	return error.value();
 }

@@ -8,6 +8,7 @@ enum class CommandType : int
 	ECHO,
 	TYPE,
 	PWD,
+	CD,
 	UNKNOWN
 };
 
@@ -15,5 +16,6 @@ static const std::unordered_map<std::string, CommandType> s_commands = {
 	{"exit", CommandType::EXIT},
 	{"echo", CommandType::ECHO},
 	{"type", CommandType::TYPE},
-	{"pwd", CommandType::PWD}
+	{"pwd", CommandType::PWD},
+	{"cd", CommandType::CD}
 };
