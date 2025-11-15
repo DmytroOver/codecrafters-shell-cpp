@@ -65,6 +65,7 @@ std::string FileSystemHelper::getPwd() const
 	{
 		return path.string();
 	}
+	return "";
 }
 
 int FileSystemHelper::changePath(const std::string& path) const
