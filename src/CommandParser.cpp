@@ -33,6 +33,10 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 
 	for (char c : input)
 	{
+		if (doubleQuoteOpen && escapeChar && c != '"' && c != '\\')
+		{
+			token.push_back('\\');
+		}
 		switch (c)
 		{
 		case ' ':
