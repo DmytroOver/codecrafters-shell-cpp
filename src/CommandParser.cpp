@@ -73,9 +73,10 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 		}
 		case '\\':
 		{
-			if (singleQuoteOpen || doubleQuoteOpen)
+			if (singleQuoteOpen || escapeChar)
 			{
 				token.push_back(c);
+				escapeChar = false;
 				break;
 			}
 			escapeChar = true;
