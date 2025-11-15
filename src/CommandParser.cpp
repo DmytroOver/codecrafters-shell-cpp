@@ -25,13 +25,43 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 	std::vector<std::string> tokens;
 	std::stringstream ss(input);
 	std::string token;
+	token.reserve(input.size());
 	CommandCreator commandCreator = s_commandCreators.at(command);
+	bool quoteOpen = false;
 
-	while (std::getline(ss, token, ' ')) {
-		if (!token.empty())
+	for (char c : input)
+	{
+		switch (c)
 		{
-			tokens.push_back(token);
+		case ' ':
+		{
+			if (quoteOpen)
+			{
+				token.push_back(c);
+			}
+			else if (!token.empty())
+			{
+				tokens.push_back(token);
+				token.clear();
+			}
+			break;
 		}
+		case '\'':
+		{
+			quoteOpen = !quoteOpen;
+			break;
+		}
+		default:
+		{
+			token.push_back(c);
+			break;
+		}
+		}
+	}
+
+	if (!token.empty())
+	{
+		tokens.push_back(token);
 	}
 
 	if (tokens.empty())

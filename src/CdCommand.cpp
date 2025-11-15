@@ -12,7 +12,11 @@ int CdCommand::execute() const
 	std::string path = m_params.size() > 1 ? m_params[1] : "";
 	if (path == "~")
 	{
+#ifdef _WIN32
+		path = std::getenv("USERPROFILE");
+#else
 		path = std::getenv("HOME");
+#endif
 	}
 	errorCode = FileSystemHelper::getInstance()->changePath(path);
 	if (errorCode)
