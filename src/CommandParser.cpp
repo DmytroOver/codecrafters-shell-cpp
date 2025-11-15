@@ -29,6 +29,7 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 	CommandCreator commandCreator = s_commandCreators.at(command);
 	bool singleQuoteOpen = false;
 	bool doubleQuoteOpen = false;
+	bool escapeChar = false;
 
 	for (char c : input)
 	{
@@ -36,9 +37,10 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 		{
 		case ' ':
 		{
-			if (singleQuoteOpen || doubleQuoteOpen)
+			if (singleQuoteOpen || doubleQuoteOpen || escapeChar)
 			{
 				token.push_back(c);
+				escapeChar = false;
 			}
 			else if (!token.empty())
 			{
@@ -49,9 +51,10 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 		}
 		case '\'':
 		{
-			if (doubleQuoteOpen)
+			if (doubleQuoteOpen || escapeChar)
 			{
 				token.push_back(c);
+				escapeChar = false;
 				break;
 			}
 			singleQuoteOpen = !singleQuoteOpen;
@@ -59,12 +62,29 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 		}
 		case '"':
 		{
+			if (singleQuoteOpen || escapeChar)
+			{
+				token.push_back(c);
+				escapeChar = false;
+				break;
+			}
 			doubleQuoteOpen = !doubleQuoteOpen;
+			break;
+		}
+		case '\\':
+		{
+			if (singleQuoteOpen || doubleQuoteOpen)
+			{
+				token.push_back(c);
+				break;
+			}
+			escapeChar = true;
 			break;
 		}
 		default:
 		{
 			token.push_back(c);
+			escapeChar = false;
 			break;
 		}
 		}
