@@ -7,6 +7,6 @@ PwdCommand::PwdCommand(const std::vector<std::string>& params) :
 
 int PwdCommand::execute() const
 {
-	writeString(FileSystemHelper::getInstance()->getPwd());
+	writeOutput(FileSystemHelper::getInstance()->getPwd());
 	return 0;
 }

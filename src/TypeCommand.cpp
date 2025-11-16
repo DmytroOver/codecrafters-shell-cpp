@@ -14,18 +14,18 @@ int TypeCommand::execute() const
 		auto it = s_commands.find(param);
 		if (it != s_commands.end())
 		{
-			writeString(param + " is a shell builtin");
+			writeOutput(param + " is a shell builtin");
 			continue;
 		}
 
 		std::string path = FileSystemHelper::getInstance()->findExePath(param);
 		if (!path.empty())
 		{
-			writeString(param + " is " + path);
+			writeOutput(param + " is " + path);
 		}
 		else
 		{
-			writeString(param + ": not found");
+			writeOutput(param + ": not found");
 		}
 	}
 	return 0;

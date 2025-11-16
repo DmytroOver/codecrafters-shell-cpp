@@ -12,6 +12,6 @@ int EchoCommand::execute() const
 	{
 		output += param + ' ';
 	}
-	writeString(output);
+	writeOutput(output);
 	return 0;
 }

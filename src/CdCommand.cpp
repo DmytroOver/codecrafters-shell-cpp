@@ -20,7 +20,7 @@ int CdCommand::execute() const
 	errorCode = FileSystemHelper::getInstance()->changePath(path);
 	if (errorCode)
 	{
-		writeString("cd: " + path + ": No such file or directory");
+		writeOutput("cd: " + path + ": No such file or directory");
 	}
 	return errorCode;
 }
