@@ -1,6 +1,5 @@
 #include "CdCommand.h"
 #include "FileSystemHelper.h"
-#include <iostream>
 
 CdCommand::CdCommand(const std::vector<std::string>& params) :
 	Command(CommandType::CD, params)
@@ -21,7 +20,7 @@ int CdCommand::execute() const
 	errorCode = FileSystemHelper::getInstance()->changePath(path);
 	if (errorCode)
 	{
-		std::cout << "cd: " << path << ": No such file or directory" << std::endl;
+		writeString("cd: " + path + ": No such file or directory");
 	}
 	return errorCode;
 }

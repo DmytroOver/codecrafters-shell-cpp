@@ -1,6 +1,5 @@
 #include "CommandParser.h"
 #include <vector>
-#include <sstream>
 #include "FileSystemHelper.h"
 #include "Command.h"
 #include "ExitCommand.h"
@@ -19,18 +18,14 @@ const CommandsMap CommandParser::s_commandCreators = {
 	{CommandType::UNKNOWN, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<UnknownCommand>(params); }}
 };
 
-std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) const
+std::vector<std::string> CommandParser::getTokens(const std::string& input) const
 {
-	CommandType command = CommandType::UNKNOWN;
 	std::vector<std::string> tokens;
-	std::stringstream ss(input);
 	std::string token;
 	token.reserve(input.size());
-	CommandCreator commandCreator = s_commandCreators.at(command);
 	bool singleQuoteOpen = false;
 	bool doubleQuoteOpen = false;
 	bool escapeChar = false;
-
 	for (char c : input)
 	{
 		if (doubleQuoteOpen && escapeChar && c != '"' && c != '\\')
@@ -99,6 +94,16 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 	{
 		tokens.push_back(token);
 	}
+
+	return tokens;
+}
+
+std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) const
+{
+	CommandType command = CommandType::UNKNOWN;
+	CommandCreator commandCreator = s_commandCreators.at(command);
+	
+	std::vector<std::string> tokens = getTokens(input);
 
 	if (tokens.empty())
 	{

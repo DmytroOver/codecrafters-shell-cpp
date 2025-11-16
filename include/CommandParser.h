@@ -12,7 +12,9 @@ using CommandsMap = std::unordered_map <CommandType, CommandCreator>;
 
 class CommandParser
 {
+private:
 	static const CommandsMap s_commandCreators;
+	std::vector<std::string> getTokens(const std::string& input) const;
 public:
 	std::unique_ptr<Command> getCommand(const std::string& input) const;
 };
