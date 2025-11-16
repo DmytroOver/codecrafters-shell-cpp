@@ -74,3 +74,20 @@ int FileSystemHelper::changePath(const std::string& path) const
 	fs::current_path(path, error);
 	return error.value();
 }
+
+int FileSystemHelper::createDirs(const std::string& path) const
+{
+	fs::path fspath{ path };
+	if (!fs::is_directory(fspath))
+	{
+		fspath = fspath.remove_filename();
+	}
+	if (fs::exists(fspath))
+	{
+		return 0;
+	}
+	std::error_code error;
+	fs::create_directories(fspath, error);
+	return error.value();
+
+}

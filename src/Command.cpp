@@ -1,4 +1,5 @@
 #include "Command.h"
+#include "FileSystemHelper.h"
 #include <iostream>
 #include <fstream>
 
@@ -36,6 +37,7 @@ void Command::writeString(const std::string& str) const
 		return;
 	}
 
+	FileSystemHelper::getInstance()->createDirs(m_outFilename);
 	std::ofstream ofs(m_outFilename);
-	ofs << str;
+	ofs << str << std::endl;
 }

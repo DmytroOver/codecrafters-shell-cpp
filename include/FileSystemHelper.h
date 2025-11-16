@@ -20,5 +20,6 @@ public:
 	std::string findExePath(const std::string& name) const;
 	std::string getPwd() const;
 	int changePath(const std::string& path) const;
+	int createDirs(const std::string& path) const;
 };
 
