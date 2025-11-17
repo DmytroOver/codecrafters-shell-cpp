@@ -26,6 +26,7 @@
     <ClCompile Include="src\ExitCommand.cpp" />
     <ClCompile Include="src\FileSystemHelper.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\OutputWriter.cpp" />
     <ClCompile Include="src\PwdCommand.cpp" />
     <ClCompile Include="src\TypeCommand.cpp" />
     <ClCompile Include="src\UnknownCommand.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="include\EchoCommand.h" />
     <ClInclude Include="include\ExitCommand.h" />
     <ClInclude Include="include\FileSystemHelper.h" />
+    <ClInclude Include="include\OutputWriter.h" />
     <ClInclude Include="include\PwdCommand.h" />
     <ClInclude Include="include\TypeCommand.h" />
     <ClInclude Include="include\UnknownCommand.h" />

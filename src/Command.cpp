@@ -7,28 +7,38 @@ Command::Command(CommandType type, const std::vector<std::string>& params):
 	m_type(type)
 {
 	m_params.reserve(params.size());
-	bool isFileOutput = false;
+	bool isStdoutRedirect = false;
+	bool isStdErrRedirect = false;
+	std::ofstream stdoutfile;
+	std::ofstream stderrfile;
 	for (const auto& param : params)
 	{
-		if (isFileOutput)
+		if (isStdoutRedirect)
 		{
-			m_outFilename = param;
+			FileSystemHelper::getInstance()->createDirs(param);
+			stdoutfile.open(param);
+			break;
+		}
+		if (isStdErrRedirect)
+		{
+			FileSystemHelper::getInstance()->createDirs(param);
+			stderrfile.open(param);
 			break;
 		}
 		if (param == ">" || param == "1>")
 		{
-			isFileOutput = true;
-			m_redirectType = RedirectType::STDOUT;
+			isStdoutRedirect = true;
 			continue;
 		}
 		if (param == "2>")
 		{
-			isFileOutput = true;
-			m_redirectType = RedirectType::STDERR;
+			isStdErrRedirect = true;
 			continue;
 		}
 		m_params.push_back(param);
 	}
+	m_output = std::make_unique<OutputWriter>(stdoutfile.is_open() ? stdoutfile : std::cout, 
+		stderrfile.is_open() ? stderrfile : std::cout);
 }
 
 CommandType Command::getType() const
@@ -38,26 +48,10 @@ CommandType Command::getType() const
 
 void Command::writeOutput(const std::string& str) const
 {
-	if (m_outFilename.empty() || m_redirectType != RedirectType::STDOUT)
-	{
-		std::cout << str << std::endl;
-		return;
-	}
-
-	FileSystemHelper::getInstance()->createDirs(m_outFilename);
-	std::ofstream ofs(m_outFilename);
-	ofs << str << std::endl;
+	m_output->writeOutput(str);
 }
 
 void Command::writeError(const std::string& str) const
 {
-	if (m_outFilename.empty() || m_redirectType != RedirectType::STDERR)
-	{
-		std::cout << str << std::endl;
-		return;
-	}
-
-	FileSystemHelper::getInstance()->createDirs(m_outFilename);
-	std::ofstream ofs(m_outFilename);
-	ofs << str << std::endl;
+	m_output->writeError(str);
 }

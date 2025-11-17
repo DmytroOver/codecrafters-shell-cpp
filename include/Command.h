@@ -1,20 +1,15 @@
 #pragma once
 #include "CommandType.h"
+#include "OutputWriter.h"
 #include <string>
 #include <vector>
-
-enum class RedirectType
-{
-	STDOUT,
-	STDERR
-};
+#include <memory>
 
 class Command
 {
 private:
 	CommandType m_type;
-	std::string m_outFilename;
-	RedirectType m_redirectType;
+	std::unique_ptr<OutputWriter> m_output;
 protected:
 	std::vector<std::string> m_params;
 public:
