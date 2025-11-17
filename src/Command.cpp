@@ -9,19 +9,21 @@ Command::Command(CommandType type, const std::vector<std::string>& params):
 	m_params.reserve(params.size());
 	bool isStdoutRedirect = false;
 	bool isStdErrRedirect = false;
+	bool isAppendStdout = false;
+	bool isAppendStderr = false;
 	
 	for (const auto& param : params)
 	{
 		if (isStdoutRedirect)
 		{
 			FileSystemHelper::getInstance()->createDirs(param);
-			m_stdoutfile.open(param);
+			m_stdoutfile.open(param, isAppendStdout ? std::ios::app : std::ios::out);
 			break;
 		}
 		if (isStdErrRedirect)
 		{
 			FileSystemHelper::getInstance()->createDirs(param);
-			m_stderrfile.open(param);
+			m_stderrfile.open(param, isAppendStderr ? std::ios::app : std::ios::out);
 			break;
 		}
 		if (param == ">" || param == "1>")
@@ -29,10 +31,21 @@ Command::Command(CommandType type, const std::vector<std::string>& params):
 			isStdoutRedirect = true;
 			continue;
 		}
+		if (param == ">>" || param == "1>>")
+		{
+			isStdoutRedirect = true;
+			isAppendStdout = true;
+			continue;
+		}
 		if (param == "2>")
 		{
 			isStdErrRedirect = true;
 			continue;
+		}
+		if (param == "2>>")
+		{
+			isStdErrRedirect = true;
+			isAppendStderr = true;
 		}
 		m_params.push_back(param);
 	}
