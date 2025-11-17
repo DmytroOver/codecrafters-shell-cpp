@@ -4,11 +4,14 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <fstream>
 
 class Command
 {
 private:
 	CommandType m_type;
+	std::ofstream m_stdoutfile;
+	std::ofstream m_stderrfile;
 	std::unique_ptr<OutputWriter> m_output;
 protected:
 	std::vector<std::string> m_params;

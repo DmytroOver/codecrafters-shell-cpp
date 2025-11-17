@@ -9,20 +9,19 @@ Command::Command(CommandType type, const std::vector<std::string>& params):
 	m_params.reserve(params.size());
 	bool isStdoutRedirect = false;
 	bool isStdErrRedirect = false;
-	std::ofstream stdoutfile;
-	std::ofstream stderrfile;
+	
 	for (const auto& param : params)
 	{
 		if (isStdoutRedirect)
 		{
 			FileSystemHelper::getInstance()->createDirs(param);
-			stdoutfile.open(param);
+			m_stdoutfile.open(param);
 			break;
 		}
 		if (isStdErrRedirect)
 		{
 			FileSystemHelper::getInstance()->createDirs(param);
-			stderrfile.open(param);
+			m_stderrfile.open(param);
 			break;
 		}
 		if (param == ">" || param == "1>")
@@ -37,8 +36,8 @@ Command::Command(CommandType type, const std::vector<std::string>& params):
 		}
 		m_params.push_back(param);
 	}
-	m_output = std::make_unique<OutputWriter>(stdoutfile.is_open() ? stdoutfile : std::cout, 
-		stderrfile.is_open() ? stderrfile : std::cout);
+	m_output = std::make_unique<OutputWriter>(m_stdoutfile.is_open() ? m_stdoutfile : std::cout, 
+		m_stderrfile.is_open() ? m_stderrfile : std::cout);
 }
 
 CommandType Command::getType() const
