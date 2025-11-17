@@ -46,6 +46,7 @@ Command::Command(CommandType type, const std::vector<std::string>& params):
 		{
 			isStdErrRedirect = true;
 			isAppendStderr = true;
+			continue;
 		}
 		m_params.push_back(param);
 	}
