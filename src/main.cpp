@@ -69,6 +69,10 @@ std::string getInput(const CommandParser& commandParser)
                 std::cout << "\r$ " << autocompletionResult;
                 input = autocompletionResult;
             }
+            else
+            {
+                std::cout << '\a';
+            }
             break;
         }
         default:
