@@ -28,6 +28,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\OutputWriter.cpp" />
     <ClCompile Include="src\PwdCommand.cpp" />
+    <ClCompile Include="src\Trie.cpp" />
     <ClCompile Include="src\TypeCommand.cpp" />
     <ClCompile Include="src\UnknownCommand.cpp" />
   </ItemGroup>
@@ -41,6 +42,7 @@
     <ClInclude Include="include\FileSystemHelper.h" />
     <ClInclude Include="include\OutputWriter.h" />
     <ClInclude Include="include\PwdCommand.h" />
+    <ClInclude Include="include\Trie.h" />
     <ClInclude Include="include\TypeCommand.h" />
     <ClInclude Include="include\UnknownCommand.h" />
   </ItemGroup>
