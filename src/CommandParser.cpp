@@ -24,6 +24,8 @@ CommandParser::CommandParser()
 	{
 		m_commandsTrie.insert(pair.first);
 	}
+	// call constructor of FileSystemHelper
+	FileSystemHelper::getInstance();
 }
 
 std::vector<std::string> CommandParser::getTokens(const std::string& input) const
@@ -142,5 +144,10 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 
 std::string CommandParser::autocomplete(const std::string& prefix) const
 {
-	return m_commandsTrie.autocomplete(prefix);
+	std::string result = m_commandsTrie.autocomplete(prefix);
+	if (result.empty())
+	{
+		result = FileSystemHelper::getInstance()->getFileTrie().autocomplete(prefix);
+	}
+	return result;
 }

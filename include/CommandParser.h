@@ -14,8 +14,9 @@ using CommandsMap = std::unordered_map <CommandType, CommandCreator>;
 class CommandParser
 {
 private:
-	Trie m_commandsTrie;
 	static const CommandsMap s_commandCreators;
+	Trie m_commandsTrie;
+
 	std::vector<std::string> getTokens(const std::string& input) const;
 public:
 	CommandParser();

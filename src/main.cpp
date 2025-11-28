@@ -33,7 +33,7 @@ std::string getInput(const CommandParser& commandParser)
 #endif
     {
         char ch = static_cast<char>(c);
-        switch (ch)
+        switch (c)
         {
         case '\r':
         case '\n':
@@ -46,7 +46,7 @@ std::string getInput(const CommandParser& commandParser)
         {
             if (!input.empty())
             {
-                std::cout << "\b \b";
+                std::cout << "\b \b" << std::flush;
                 input.pop_back();
             }
             break;
@@ -55,8 +55,21 @@ std::string getInput(const CommandParser& commandParser)
         case 0:
         case 0xE0:
         {
-            // TODO: do something with the special char
-            ch = _getch();
+            // TODO: handle correct arrows behaviour
+            c = _getch();
+            switch (c)
+            {
+            case 75: // left arrow
+            {
+                //std::cout << "\033[1D" << std::flush;
+                break;
+            }
+            case 77: // right arrow
+            {
+                //std::cout << "\033[1C" << std::flush;
+                break;
+            }
+            }
             break;
         }
 #endif
@@ -66,12 +79,12 @@ std::string getInput(const CommandParser& commandParser)
             if (!autocompletionResult.empty())
             {
                 autocompletionResult.push_back(' ');
-                std::cout << "\r$ " << autocompletionResult;
+                std::cout << "\r$ " << autocompletionResult << std::flush;
                 input = autocompletionResult;
             }
             else
             {
-                std::cout << '\a';
+                std::cout << '\a' << std::flush;
             }
             break;
         }

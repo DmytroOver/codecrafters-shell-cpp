@@ -1,12 +1,12 @@
 #pragma once
 #include <string>
-#include <unordered_map>
+#include <map>
 
 class Trie
 {
 	struct TrieNode
 	{
-		std::unordered_map<char, TrieNode> m_nodes;
+		std::map<char, TrieNode> m_nodes;
 		bool isEnd = false;
 	} m_root;
 

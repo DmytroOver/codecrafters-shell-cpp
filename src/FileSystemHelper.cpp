@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <sstream>
 #include <system_error>
+#include <algorithm>
 
 namespace fs = std::filesystem;
 
@@ -11,13 +12,39 @@ FileSystemHelper* FileSystemHelper::s_instance;
 FileSystemHelper::FileSystemHelper()
 {
 	const std::string& pathEnv = std::getenv("PATH");
+#if _WIN32
+	const std::string& pathExt = std::getenv("PATHEXT");
+	std::string ext;
+#endif
 	std::stringstream ss(pathEnv);
 	std::string dir;
+	std::string filename;
 	char pathsep = fs::path::preferred_separator == '/' ? ':' : ';';
 	while (std::getline(ss, dir, pathsep)) {
 		if (!dir.empty() && fs::exists(dir))
 		{
 			m_pathDirs.push_back(dir);
+
+			for (const auto& dirEntry : fs::directory_iterator{ dir })
+			{
+				std::error_code error;
+#if _WIN32
+				ext = dirEntry.path().extension().string();
+				std::transform(ext.begin(), ext.end(), ext.begin(), ::toupper);
+				if (!ext.empty() && pathExt.find(ext) != std::string::npos)
+#else
+				fs::perms perms = fs::status(dirEntry.path(), error).permissions();
+				if (!error && (
+					(perms & fs::perms::owner_exec) != fs::perms::none ||
+					(perms & fs::perms::group_exec) != fs::perms::none ||
+					(perms & fs::perms::others_exec) != fs::perms::none)
+					)
+#endif
+				{
+					filename = dirEntry.path().filename().string();
+					m_filesTrie.insert(filename);
+				}
+			}
 		}
 	}
 }
@@ -39,8 +66,8 @@ std::string FileSystemHelper::findExePath(const std::string& name) const
 	{
 		for (const auto& dirEntry : fs::directory_iterator{ dir })
 		{
-			const std::string& filename = dirEntry.path().filename().string();
-			const std::string& stem = dirEntry.path().stem().string();
+			std::string filename = dirEntry.path().filename().string();
+			std::string stem = dirEntry.path().stem().string();
 			if (name == filename || name == stem)
 			{
 				fs::perms perms = fs::status(dirEntry.path()).permissions();
@@ -90,4 +117,9 @@ int FileSystemHelper::createDirs(const std::string& path) const
 	fs::create_directories(fspath, error);
 	return error.value();
 
+}
+
+const Trie& FileSystemHelper::getFileTrie() const
+{
+	return m_filesTrie;
 }
