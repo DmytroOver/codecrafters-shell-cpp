@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include "Trie.h"
 
 class Command;
 enum class CommandType;
@@ -13,9 +14,17 @@ using CommandsMap = std::unordered_map <CommandType, CommandCreator>;
 class CommandParser
 {
 private:
+	Trie m_commandsTrie;
 	static const CommandsMap s_commandCreators;
 	std::vector<std::string> getTokens(const std::string& input) const;
 public:
+	CommandParser();
+	CommandParser(CommandParser&) = delete;
+	CommandParser(CommandParser&&) = delete;
+	CommandParser& operator=(const CommandParser&) = delete;
+	CommandParser& operator=(CommandParser&&) = delete;
+	~CommandParser() = default;
 	std::unique_ptr<Command> getCommand(const std::string& input) const;
+	std::string autocomplete(const std::string& prefix) const;
 };
 

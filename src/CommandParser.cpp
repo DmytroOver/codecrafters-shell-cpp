@@ -18,6 +18,14 @@ const CommandsMap CommandParser::s_commandCreators = {
 	{CommandType::UNKNOWN, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<UnknownCommand>(params); }}
 };
 
+CommandParser::CommandParser()
+{
+	for (const auto& pair : s_commands)
+	{
+		m_commandsTrie.insert(pair.first);
+	}
+}
+
 std::vector<std::string> CommandParser::getTokens(const std::string& input) const
 {
 	std::vector<std::string> tokens;
@@ -130,4 +138,9 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 	}
 
 	return commandCreator(tokens);
+}
+
+std::string CommandParser::autocomplete(const std::string& prefix) const
+{
+	return m_commandsTrie.autocomplete(prefix);
 }
