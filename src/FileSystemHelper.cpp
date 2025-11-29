@@ -5,6 +5,8 @@
 #include <system_error>
 #include <algorithm>
 
+#include <iostream>
+
 namespace fs = std::filesystem;
 
 FileSystemHelper* FileSystemHelper::s_instance;
@@ -14,11 +16,11 @@ FileSystemHelper::FileSystemHelper()
 	const std::string& pathEnv = std::getenv("PATH");
 #if _WIN32
 	const std::string& pathExt = std::getenv("PATHEXT");
-	std::string ext;
 #endif
 	std::stringstream ss(pathEnv);
 	std::string dir;
 	std::string filename;
+	std::string ext;
 	char pathsep = fs::path::preferred_separator == '/' ? ':' : ';';
 	while (std::getline(ss, dir, pathsep)) {
 		if (!dir.empty() && fs::exists(dir))
@@ -28,13 +30,18 @@ FileSystemHelper::FileSystemHelper()
 			for (const auto& dirEntry : fs::directory_iterator{ dir })
 			{
 				std::error_code error;
-#if _WIN32
 				ext = dirEntry.path().extension().string();
+#if _WIN32
 				std::transform(ext.begin(), ext.end(), ext.begin(), ::toupper);
 				if (!ext.empty() && pathExt.find(ext) != std::string::npos)
 #else
-				fs::perms perms = fs::status(dirEntry.path(), error).permissions();
-				if (!error && (
+				if (!ext.empty() && ext != ".sh")
+				{
+					continue;
+				}
+				fs::file_status status = fs::status(dirEntry.path(), error);
+				fs::perms perms = status.permissions();
+				if (!error && fs::is_regular_file(status) && (
 					(perms & fs::perms::owner_exec) != fs::perms::none ||
 					(perms & fs::perms::group_exec) != fs::perms::none ||
 					(perms & fs::perms::others_exec) != fs::perms::none)

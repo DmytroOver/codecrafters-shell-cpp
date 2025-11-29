@@ -24,8 +24,6 @@ CommandParser::CommandParser()
 	{
 		m_commandsTrie.insert(pair.first);
 	}
-	// call constructor of FileSystemHelper
-	FileSystemHelper::getInstance();
 }
 
 std::vector<std::string> CommandParser::getTokens(const std::string& input) const

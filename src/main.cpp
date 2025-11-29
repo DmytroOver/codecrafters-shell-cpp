@@ -33,7 +33,11 @@ std::string getInput(const CommandParser& commandParser)
 #endif
     {
         char ch = static_cast<char>(c);
-        switch (c)
+#if _WIN32
+        switch(c)
+#else
+        switch (ch)
+#endif
         {
         case '\r':
         case '\n':
