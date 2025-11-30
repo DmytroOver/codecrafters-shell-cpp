@@ -26,6 +26,8 @@ std::string getInput(const CommandParser& commandParser)
     std::string input;
     std::cout << "$ ";
 
+    bool doubleTab = false;
+
 #if _WIN32
     while ((c = _getch()) != EOF)
 #else
@@ -79,16 +81,32 @@ std::string getInput(const CommandParser& commandParser)
 #endif
         case '\t':
         {
-            std::string autocompletionResult = commandParser.autocomplete(input);
-            if (!autocompletionResult.empty())
+            std::vector<std::string> completionResults = commandParser.autocomplete(input);
+            if (completionResults.empty())
             {
-                autocompletionResult.push_back(' ');
-                std::cout << "\r$ " << autocompletionResult << std::flush;
-                input = autocompletionResult;
+                std::cout << '\a' << std::flush;
+            }
+            else if (completionResults.size() == 1)
+            {
+                std::string completionResult = completionResults[0];
+                completionResult.push_back(' ');
+                std::cout << "\r$ " << completionResult << std::flush;
+                input = completionResult;
+            }
+            else if (!doubleTab)
+            {
+                doubleTab = true;
+                std::cout << '\a' << std::flush;
             }
             else
             {
-                std::cout << '\a' << std::flush;
+                doubleTab = false;
+                std::cout << std::endl;
+                for (const auto& res : completionResults)
+                {
+                    std::cout << res << "  ";
+                }
+                std::cout << std::endl << "$ " << input;
             }
             break;
         }

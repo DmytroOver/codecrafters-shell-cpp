@@ -140,9 +140,9 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 	return commandCreator(tokens);
 }
 
-std::string CommandParser::autocomplete(const std::string& prefix) const
+std::vector<std::string> CommandParser::autocomplete(const std::string& prefix) const
 {
-	std::string result = m_commandsTrie.autocomplete(prefix);
+	std::vector<std::string> result = m_commandsTrie.autocomplete(prefix);
 	if (result.empty())
 	{
 		result = FileSystemHelper::getInstance()->getFileTrie().autocomplete(prefix);

@@ -26,6 +26,6 @@ public:
 	CommandParser& operator=(CommandParser&&) = delete;
 	~CommandParser() = default;
 	std::unique_ptr<Command> getCommand(const std::string& input) const;
-	std::string autocomplete(const std::string& prefix) const;
+	std::vector<std::string> autocomplete(const std::string& prefix) const;
 };
 

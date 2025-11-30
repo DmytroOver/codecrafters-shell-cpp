@@ -44,25 +44,37 @@ bool Trie::startsWith(const std::string& prefix) const
 	return true;
 }
 
-std::string Trie::autocomplete(const std::string& prefix) const
+std::vector<std::string> Trie::autocomplete(const std::string& prefix) const
 {
-	std::string word;
+	std::vector<std::string> words;
 	const TrieNode* currentNode = &m_root;
 	for (char c : prefix)
 	{
 		auto it = currentNode->m_nodes.find(c);
 		if (it == currentNode->m_nodes.end())
 		{
-			return word;
+			return words;
 		}
 		currentNode = &it->second;
 	}
-	word = prefix;
-	while (!currentNode->isEnd)
+	dfs(*currentNode, prefix, words);
+
+	return words;
+}
+
+void Trie::dfs(const TrieNode& node, const std::string& word, std::vector<std::string>& res) const
+{
+	if (node.isEnd)
 	{
-		word += currentNode->m_nodes.cbegin()->first;
-		currentNode = &currentNode->m_nodes.cbegin()->second;
+		res.push_back(word);
+		if (node.m_nodes.empty())
+		{
+			return;
+		}
 	}
 
-	return word;
+	for (const auto& pair : node.m_nodes)
+	{
+		dfs(pair.second, word + pair.first, res);
+	}
 }
