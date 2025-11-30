@@ -95,8 +95,16 @@ std::string getInput(const CommandParser& commandParser)
             }
             else if (!doubleTab)
             {
-                doubleTab = true;
-                std::cout << '\a' << std::flush;
+                if (completionResults[1].find(completionResults[0]) != std::string::npos)
+                {
+                    std::cout << "\r$ " << completionResults[0] << std::flush;
+                    input = completionResults[0];
+                }
+                else
+                {
+                    doubleTab = true;
+                    std::cout << '\a' << std::flush;
+                }
             }
             else
             {
