@@ -11,5 +11,5 @@ int ExitCommand::execute() const
 	{
 		code = std::atoi(m_params[1].c_str());
 	}
-	return code;
+	exit(code);
 }

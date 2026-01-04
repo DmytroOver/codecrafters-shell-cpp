@@ -1,4 +1,5 @@
 #include "EchoCommand.h"
+#include <iostream>
 #include <ranges>
 
 EchoCommand::EchoCommand(const std::vector<std::string>& params):
@@ -12,6 +13,6 @@ int EchoCommand::execute() const
 	{
 		output += param + ' ';
 	}
-	writeOutput(output);
+	std::cout << output << std::endl;
 	return 0;
 }

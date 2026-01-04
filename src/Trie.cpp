@@ -3,7 +3,7 @@
 Trie::Trie(): m_root()
 {}
 
-void Trie::insert(const std::string & word)
+void Trie::insert(const std::string& word)
 {
 	TrieNode* currentNode = &m_root;
 	for (char c : word)

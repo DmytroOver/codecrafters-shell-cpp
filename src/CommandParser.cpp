@@ -1,4 +1,5 @@
 #include "CommandParser.h"
+#include <iostream>
 #include <vector>
 #include "FileSystemHelper.h"
 #include "Command.h"
@@ -8,14 +9,16 @@
 #include "TypeCommand.h"
 #include "PwdCommand.h"
 #include "CdCommand.h"
+#include "ExeCommand.h"
 
 const CommandsMap CommandParser::s_commandCreators = {
-	{CommandType::EXIT, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<ExitCommand>(params); }},
-	{CommandType::ECHO, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<EchoCommand>(params); }},
-	{CommandType::TYPE, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<TypeCommand>(params); }},
-	{CommandType::PWD, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<PwdCommand>(params); }},
-	{CommandType::CD, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<CdCommand>(params); }},
-	{CommandType::UNKNOWN, [](const std::vector<std::string>& params) -> std::unique_ptr<Command> {return std::make_unique<UnknownCommand>(params); }}
+	{CommandType::EXIT, [](const std::vector<std::string>& params) {return std::make_unique<ExitCommand>(params); }},
+	{CommandType::ECHO, [](const std::vector<std::string>& params) {return std::make_unique<EchoCommand>(params); }},
+	{CommandType::TYPE, [](const std::vector<std::string>& params) {return std::make_unique<TypeCommand>(params); }},
+	{CommandType::PWD, [](const std::vector<std::string>& params) {return std::make_unique<PwdCommand>(params); }},
+	{CommandType::CD, [](const std::vector<std::string>& params) {return std::make_unique<CdCommand>(params); }},
+	{CommandType::EXE, [](const std::vector<std::string>& params) {return std::make_unique<ExeCommand>(params); }},
+	{CommandType::UNKNOWN, [](const std::vector<std::string>& params) {return std::make_unique<UnknownCommand>(params); }}
 };
 
 CommandParser::CommandParser()
@@ -124,17 +127,18 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 		command = it->second;
 	}
 
+	// if command is built-in
 	if (command != CommandType::UNKNOWN)
 	{
 		commandCreator = s_commandCreators.at(command);
-		return commandCreator(tokens);
 	}
-
-	std::string exePath = FileSystemHelper::getInstance()->findExePath(tokens[0]);
-	if (!exePath.empty())
+	else // maybe executable
 	{
-		system(input.c_str());
-		return nullptr;
+		std::string exePath = FileSystemHelper::getInstance()->findExePath(tokens[0]);
+		if (!exePath.empty())
+		{
+			commandCreator = s_commandCreators.at(CommandType::EXE);
+		}
 	}
 
 	return commandCreator(tokens);

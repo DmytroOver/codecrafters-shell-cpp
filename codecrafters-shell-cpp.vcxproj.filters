@@ -45,10 +45,10 @@
     <ClCompile Include="src\CdCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\OutputWriter.cpp">
+    <ClCompile Include="src\Trie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Trie.cpp">
+    <ClCompile Include="src\ExeCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,10 +83,10 @@
     <ClInclude Include="include\CdCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\OutputWriter.h">
+    <ClInclude Include="include\Trie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Trie.h">
+    <ClInclude Include="include\ExeCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

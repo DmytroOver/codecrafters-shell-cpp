@@ -1,3 +1,4 @@
+#include <iostream>
 #include "PwdCommand.h"
 #include "FileSystemHelper.h"
 
@@ -7,6 +8,6 @@ PwdCommand::PwdCommand(const std::vector<std::string>& params) :
 
 int PwdCommand::execute() const
 {
-	writeOutput(FileSystemHelper::getInstance()->getPwd());
+	std::cout << FileSystemHelper::getInstance()->getPwd() << std::endl;
 	return 0;
 }

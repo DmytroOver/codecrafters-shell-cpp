@@ -9,6 +9,7 @@ enum class CommandType : int
 	TYPE,
 	PWD,
 	CD,
+	EXE,
 	UNKNOWN
 };
 

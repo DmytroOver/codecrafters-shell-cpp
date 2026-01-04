@@ -23,10 +23,10 @@
     <ClCompile Include="src\Command.cpp" />
     <ClCompile Include="src\CommandParser.cpp" />
     <ClCompile Include="src\EchoCommand.cpp" />
+    <ClCompile Include="src\ExeCommand.cpp" />
     <ClCompile Include="src\ExitCommand.cpp" />
     <ClCompile Include="src\FileSystemHelper.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\OutputWriter.cpp" />
     <ClCompile Include="src\PwdCommand.cpp" />
     <ClCompile Include="src\Trie.cpp" />
     <ClCompile Include="src\TypeCommand.cpp" />
@@ -38,9 +38,9 @@
     <ClInclude Include="include\CommandParser.h" />
     <ClInclude Include="include\CommandType.h" />
     <ClInclude Include="include\EchoCommand.h" />
+    <ClInclude Include="include\ExeCommand.h" />
     <ClInclude Include="include\ExitCommand.h" />
     <ClInclude Include="include\FileSystemHelper.h" />
-    <ClInclude Include="include\OutputWriter.h" />
     <ClInclude Include="include\PwdCommand.h" />
     <ClInclude Include="include\Trie.h" />
     <ClInclude Include="include\TypeCommand.h" />
@@ -75,6 +75,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -107,6 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,6 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,6 +152,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

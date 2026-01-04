@@ -7,6 +7,6 @@ UnknownCommand::UnknownCommand(const std::vector<std::string>& params) :
 
 int UnknownCommand::execute() const
 {
-	writeOutput(m_params[0] + ": command not found");
+	std::cout << m_params[0] << ": command not found" << std::endl;
 	return -1;
 }

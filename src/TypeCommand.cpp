@@ -1,5 +1,6 @@
 #include "TypeCommand.h"
 #include "FileSystemHelper.h"
+#include <iostream>
 #include <ranges>
 
 TypeCommand::TypeCommand(const std::vector<std::string>& params) :
@@ -14,18 +15,18 @@ int TypeCommand::execute() const
 		auto it = s_commands.find(param);
 		if (it != s_commands.end())
 		{
-			writeOutput(param + " is a shell builtin");
+			std::cout << param << " is a shell builtin" << std::endl;
 			continue;
 		}
 
 		std::string path = FileSystemHelper::getInstance()->findExePath(param);
 		if (!path.empty())
 		{
-			writeOutput(param + " is " + path);
+			std::cout << param << " is " << path << std::endl;
 		}
 		else
 		{
-			writeOutput(param + ": not found");
+			std::cout << param << ": not found" << std::endl;
 		}
 	}
 	return 0;

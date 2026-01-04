@@ -1,25 +1,25 @@
 #pragma once
 #include "CommandType.h"
-#include "OutputWriter.h"
 #include <string>
 #include <vector>
 #include <memory>
-#include <fstream>
+#include <cstdio>
 
 class Command
 {
 private:
 	CommandType m_type;
-	std::ofstream m_stdoutfile;
-	std::ofstream m_stderrfile;
-	std::unique_ptr<OutputWriter> m_output;
+
+	int m_stdout;
+	int m_stderr;
+	FILE* m_outfile = nullptr;
+	FILE* m_errfile = nullptr;
 protected:
 	std::vector<std::string> m_params;
 public:
 	Command(CommandType type, const std::vector<std::string>& params);
+	virtual ~Command();
 	CommandType getType() const;
-	void writeOutput(const std::string& str) const;
-	void writeError(const std::string& str) const;
 	virtual int execute() const = 0;
 };
 

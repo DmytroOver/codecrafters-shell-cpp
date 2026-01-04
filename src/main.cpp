@@ -5,6 +5,7 @@
 #include <string>
 #if _WIN32
 #include <conio.h>
+#include <io.h>
 #else
 #include <termios.h>
 #include <unistd.h>
@@ -135,9 +136,6 @@ int main() {
     std::cerr << std::unitbuf;
 
     CommandParser commandParser;
-    int result = 0;
-    std::unique_ptr<Command> command = nullptr;
-    CommandType commandType = CommandType::UNKNOWN;
 
     do
     {
@@ -145,14 +143,13 @@ int main() {
 
         if (!input.empty())
         {
-            command = commandParser.getCommand(input);
-            if (command != nullptr)
+            std::unique_ptr<Command> command = commandParser.getCommand(input);
+            if (command)
             {
-                commandType = command->getType();
-                result = command->execute();
+                command->execute();
             }
         }
-    } while (commandType != CommandType::EXIT);
+    } while (true);
 
-    return result;
+    return 0;
 }
