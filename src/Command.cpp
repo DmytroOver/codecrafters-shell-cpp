@@ -1,9 +1,10 @@
 #include "Command.h"
 #include "FileSystemHelper.h"
-#include <iostream>
 #include <fstream>
 #if _WIN32
 #include <io.h>
+#else
+#include <unistd.h>
 #endif
 
 Command::Command(CommandType type, const std::vector<std::string>& params): 

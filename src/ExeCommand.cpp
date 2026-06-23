@@ -5,7 +5,7 @@
 #include <process.h>
 #else
 #include <unistd.h>
-#include <wait.h>
+#include <sys/wait.h>
 #endif
 
 ExeCommand::ExeCommand(const std::vector<std::string>& params) :
