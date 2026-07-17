@@ -12,6 +12,7 @@
 #include "PwdCommand.h"
 #include "CdCommand.h"
 #include "ExeCommand.h"
+#include "HistoryCommand.h"
 
 const CommandsMap CommandRunner::s_commandCreators = {
 	{CommandType::EXIT, [](const std::vector<std::string>& params) {return std::make_unique<ExitCommand>(params); }},
@@ -20,6 +21,7 @@ const CommandsMap CommandRunner::s_commandCreators = {
 	{CommandType::PWD, [](const std::vector<std::string>& params) {return std::make_unique<PwdCommand>(params); }},
 	{CommandType::CD, [](const std::vector<std::string>& params) {return std::make_unique<CdCommand>(params); }},
 	{CommandType::EXE, [](const std::vector<std::string>& params) {return std::make_unique<ExeCommand>(params); }},
+	{CommandType::HISTORY, [](const std::vector<std::string>& params) {return std::make_unique<HistoryCommand>(params); }},
 	{CommandType::UNKNOWN, [](const std::vector<std::string>& params) {return std::make_unique<UnknownCommand>(params); }}
 };
 
