@@ -178,7 +178,7 @@ void CommandRunner::run(const std::string& input) const
 	{
 		if (status)
 		{
-			std::cerr << "status code: " << status << std::endl;
+			// std::cerr << "status code: " << status << std::endl;
 		}
 	}
 }
