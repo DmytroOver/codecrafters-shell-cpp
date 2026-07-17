@@ -1,5 +1,6 @@
 #include "CommandRunner.h"
 #include <unistd.h>
+#include <sys/wait.h>
 #include <iostream>
 #include <vector>
 #include "FileSystemHelper.h"
