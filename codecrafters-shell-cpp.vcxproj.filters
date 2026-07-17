@@ -56,7 +56,7 @@
     <ClInclude Include="include\Command.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\CommandParser.h">
+    <ClInclude Include="include\CommandRunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\CommandType.h">

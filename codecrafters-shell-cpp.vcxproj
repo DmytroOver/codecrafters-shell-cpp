@@ -35,7 +35,7 @@
   <ItemGroup>
     <ClInclude Include="include\CdCommand.h" />
     <ClInclude Include="include\Command.h" />
-    <ClInclude Include="include\CommandParser.h" />
+    <ClInclude Include="include\CommandRunner.h" />
     <ClInclude Include="include\CommandType.h" />
     <ClInclude Include="include\EchoCommand.h" />
     <ClInclude Include="include\ExeCommand.h" />

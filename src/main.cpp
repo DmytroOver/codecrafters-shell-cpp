@@ -1,5 +1,5 @@
 #include "Command.h"
-#include "CommandParser.h"
+#include "CommandRunner.h"
 
 #include <iostream>
 #include <string>
@@ -11,7 +11,7 @@
 #include <unistd.h>
 #endif
 
-std::string getInput(const CommandParser& commandParser)
+std::string getInput(const CommandRunner& commandParser)
 {
 #if !_WIN32
     struct termios oldt, newt;
@@ -135,19 +135,15 @@ int main() {
     std::cout << std::unitbuf;
     std::cerr << std::unitbuf;
 
-    CommandParser commandParser;
+    CommandRunner commandRunner;
 
     do
     {
-        std::string input = getInput(commandParser);
+        std::string input = getInput(commandRunner);
 
         if (!input.empty())
         {
-            std::unique_ptr<Command> command = commandParser.getCommand(input);
-            if (command)
-            {
-                command->execute();
-            }
+            commandRunner.run(input);
         }
     } while (true);
 

@@ -1,4 +1,5 @@
-#include "CommandParser.h"
+#include "CommandRunner.h"
+#include <unistd.h>
 #include <iostream>
 #include <vector>
 #include "FileSystemHelper.h"
@@ -11,7 +12,7 @@
 #include "CdCommand.h"
 #include "ExeCommand.h"
 
-const CommandsMap CommandParser::s_commandCreators = {
+const CommandsMap CommandRunner::s_commandCreators = {
 	{CommandType::EXIT, [](const std::vector<std::string>& params) {return std::make_unique<ExitCommand>(params); }},
 	{CommandType::ECHO, [](const std::vector<std::string>& params) {return std::make_unique<EchoCommand>(params); }},
 	{CommandType::TYPE, [](const std::vector<std::string>& params) {return std::make_unique<TypeCommand>(params); }},
@@ -21,7 +22,7 @@ const CommandsMap CommandParser::s_commandCreators = {
 	{CommandType::UNKNOWN, [](const std::vector<std::string>& params) {return std::make_unique<UnknownCommand>(params); }}
 };
 
-CommandParser::CommandParser()
+CommandRunner::CommandRunner()
 {
 	for (const auto& pair : s_commands)
 	{
@@ -29,7 +30,7 @@ CommandParser::CommandParser()
 	}
 }
 
-std::vector<std::string> CommandParser::getTokens(const std::string& input) const
+std::vector<std::string> CommandRunner::getTokens(const std::string& input) const
 {
 	std::vector<std::string> tokens;
 	std::string token;
@@ -109,12 +110,73 @@ std::vector<std::string> CommandParser::getTokens(const std::string& input) cons
 	return tokens;
 }
 
-std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) const
+void CommandRunner::run(const std::string& input) const
+{
+	std::vector<std::string> tokens = getTokens(input);
+
+	if (tokens.empty())
+	{
+		return;
+	}
+	tokens.emplace_back("");
+
+	std::vector<std::unique_ptr<Command>> commands;
+	std::vector<std::string> currentTokens;
+	currentTokens.reserve(tokens.size());
+
+	bool isPipe = false;
+	int fd[2];
+	for (const auto& token : tokens)
+	{
+		if (token == "|")
+		{
+			if (currentTokens.empty())
+			{
+				std::cerr << "parse error near '" << token << "'\n";
+				return;
+			}
+			if (std::unique_ptr<Command> command = getCommand(currentTokens))
+			{
+				if (pipe(fd) < 0)
+				{
+					std::cerr << "cannot create pipe \n";
+					return;
+				}
+				command->redirectOut(fd);
+				commands.push_back(std::move(command));
+				isPipe = true;
+			}
+			currentTokens.clear();
+			continue;
+		}
+		else if (token.empty())
+		{
+			// end of input
+			if (std::unique_ptr<Command> command = getCommand(currentTokens))
+			{
+				if (isPipe)
+				{
+					command->redirectIn(fd);
+				}
+				commands.push_back(std::move(command));
+			}
+			currentTokens.clear();
+			continue;
+		}
+		currentTokens.push_back(token);
+	}
+
+	for (auto& cmd : commands)
+	{
+		cmd->execute();
+		cmd = nullptr;
+	}
+}
+
+std::unique_ptr<Command> CommandRunner::getCommand(const std::vector<std::string>& tokens) const
 {
 	CommandType command = CommandType::UNKNOWN;
 	CommandCreator commandCreator = s_commandCreators.at(command);
-	
-	std::vector<std::string> tokens = getTokens(input);
 
 	if (tokens.empty())
 	{
@@ -144,7 +206,7 @@ std::unique_ptr<Command> CommandParser::getCommand(const std::string& input) con
 	return commandCreator(tokens);
 }
 
-std::vector<std::string> CommandParser::autocomplete(const std::string& prefix) const
+std::vector<std::string> CommandRunner::autocomplete(const std::string& prefix) const
 {
 	std::vector<std::string> result = m_commandsTrie.autocomplete(prefix);
 	if (result.empty())

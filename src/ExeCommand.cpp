@@ -33,13 +33,44 @@ int ExeCommand::execute() const
 	}
 	else if (pid == 0)
 	{
+		if (m_redirectOut)
+		{
+			dup2(m_fd[1], STDOUT_FILENO);
+			close(m_fd[0]);
+			close(m_fd[1]);
+		}
+		else if (m_redirectIn)
+		{
+			dup2(m_fd[0], STDIN_FILENO);
+			close(m_fd[0]);
+			close(m_fd[1]);
+		}
 		return execvp(program, const_cast<char* const*>(params.data()));
 	}
 	else
 	{
+		if (m_redirectIn)
+		{
+			close(m_fd[0]);
+			close(m_fd[1]);
+		}
 		int status = 0;
 		waitpid(pid, &status, 0);
 		return WEXITSTATUS(status);
 	}
 #endif
+}
+
+void ExeCommand::redirectIn(int fd[2])
+{
+	m_redirectIn = true;
+	m_fd[0] = fd[0];
+	m_fd[1] = fd[1];
+}
+
+void ExeCommand::redirectOut(int fd[2])
+{
+	m_redirectOut = true;
+	m_fd[0] = fd[0];
+	m_fd[1] = fd[1];
 }

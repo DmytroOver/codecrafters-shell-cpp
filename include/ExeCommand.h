@@ -4,8 +4,14 @@
 class ExeCommand :
     public Command
 {
+    int m_fd[2] = {};
+    bool m_redirectOut = false;
+    bool m_redirectIn = false;
 public:
     ExeCommand(const std::vector<std::string>& params);
     int execute() const override;
+
+    void redirectIn(int fd[2]) override;
+    void redirectOut(int fd[2]) override;
 };
 
