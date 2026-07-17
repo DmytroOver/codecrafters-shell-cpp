@@ -13,6 +13,7 @@ int EchoCommand::execute() const
 	{
 		output += param + ' ';
 	}
+	output.pop_back();
 	std::cout << output << std::endl;
 	return 0;
 }
