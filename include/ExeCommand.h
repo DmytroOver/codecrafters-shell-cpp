@@ -4,7 +4,8 @@
 class ExeCommand :
     public Command
 {
-    int m_fd[2] = {};
+    int m_fdIn[2] = {};
+    int m_fdOut[2] = {};
     bool m_redirectOut = false;
     bool m_redirectIn = false;
 public:

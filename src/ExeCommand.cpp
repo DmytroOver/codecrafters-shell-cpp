@@ -35,15 +35,16 @@ int ExeCommand::execute() const
 	{
 		if (m_redirectOut)
 		{
-			dup2(m_fd[1], STDOUT_FILENO);
-			close(m_fd[0]);
-			close(m_fd[1]);
+			dup2(m_fdOut[1], STDOUT_FILENO);
+			close(m_fdOut[0]);
+			close(m_fdOut[1]);
 		}
-		else if (m_redirectIn)
+
+		if (m_redirectIn)
 		{
-			dup2(m_fd[0], STDIN_FILENO);
-			close(m_fd[0]);
-			close(m_fd[1]);
+			dup2(m_fdIn[0], STDIN_FILENO);
+			close(m_fdIn[0]);
+			close(m_fdIn[1]);
 		}
 		return execvp(program, const_cast<char* const*>(params.data()));
 	}
@@ -51,8 +52,8 @@ int ExeCommand::execute() const
 	{
 		if (m_redirectIn)
 		{
-			close(m_fd[0]);
-			close(m_fd[1]);
+			close(m_fdIn[0]);
+			close(m_fdIn[1]);
 		}
 		return 0;
 	}
@@ -62,13 +63,13 @@ int ExeCommand::execute() const
 void ExeCommand::redirectIn(int fd[2])
 {
 	m_redirectIn = true;
-	m_fd[0] = fd[0];
-	m_fd[1] = fd[1];
+	m_fdIn[0] = fd[0];
+	m_fdIn[1] = fd[1];
 }
 
 void ExeCommand::redirectOut(int fd[2])
 {
 	m_redirectOut = true;
-	m_fd[0] = fd[0];
-	m_fd[1] = fd[1];
+	m_fdOut[0] = fd[0];
+	m_fdOut[1] = fd[1];
 }

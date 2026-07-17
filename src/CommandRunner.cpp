@@ -125,8 +125,8 @@ void CommandRunner::run(const std::string& input) const
 	std::vector<std::string> currentTokens;
 	currentTokens.reserve(tokens.size());
 
-	bool isPipe = false;
-	int fd[2];
+	int pipeCount = 0;
+	std::vector<std::array<int, 2>> fds;
 	for (const auto& token : tokens)
 	{
 		if (token == "|")
@@ -138,14 +138,14 @@ void CommandRunner::run(const std::string& input) const
 			}
 			if (std::unique_ptr<Command> command = getCommand(currentTokens))
 			{
-				if (pipe(fd) < 0)
+				fds.emplace_back();
+				if (pipe(fds[pipeCount].data()) < 0)
 				{
 					std::cerr << "cannot create pipe \n";
 					return;
 				}
-				command->redirectOut(fd);
 				commands.push_back(std::move(command));
-				isPipe = true;
+				pipeCount++;
 			}
 			currentTokens.clear();
 			continue;
@@ -155,10 +155,6 @@ void CommandRunner::run(const std::string& input) const
 			// end of input
 			if (std::unique_ptr<Command> command = getCommand(currentTokens))
 			{
-				if (isPipe)
-				{
-					command->redirectIn(fd);
-				}
 				commands.push_back(std::move(command));
 			}
 			currentTokens.clear();
@@ -167,19 +163,33 @@ void CommandRunner::run(const std::string& input) const
 		currentTokens.push_back(token);
 	}
 
-	for (auto& cmd : commands)
+	for (int i = 0; i < commands.size(); ++i)
 	{
-		cmd->execute();
-		cmd = nullptr;
+		if (pipeCount)
+		{
+			if (i < commands.size() - 1)
+			{
+				commands[i]->redirectOut(fds[i].data());
+			}
+			if (i > 0)
+			{
+				commands[i]->redirectIn(fds[i-1].data());
+			}
+		}
+		commands[i]->execute();
+		commands[i] = nullptr;
+	}
+
+	for (const auto& fd : fds)
+	{
+		close(fd[0]);
+		close(fd[1]);
 	}
 
 	int status;
 	while (wait(&status) != -1)
 	{
-		if (status)
-		{
-			// std::cerr << "status code: " << status << std::endl;
-		}
+
 	}
 }
 
