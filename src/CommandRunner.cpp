@@ -171,6 +171,15 @@ void CommandRunner::run(const std::string& input) const
 		cmd->execute();
 		cmd = nullptr;
 	}
+
+	int status;
+	while (wait(&status) != -1)
+	{
+		if (status)
+		{
+			std::cerr << "status code: " << status << std::endl;
+		}
+	}
 }
 
 std::unique_ptr<Command> CommandRunner::getCommand(const std::vector<std::string>& tokens) const

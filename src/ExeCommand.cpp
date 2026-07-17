@@ -54,9 +54,7 @@ int ExeCommand::execute() const
 			close(m_fd[0]);
 			close(m_fd[1]);
 		}
-		int status = 0;
-		waitpid(pid, &status, 0);
-		return WEXITSTATUS(status);
+		return 0;
 	}
 #endif
 }
