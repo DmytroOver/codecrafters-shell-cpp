@@ -106,7 +106,7 @@ CommandType Command::getType() const
 void Command::redirectOut(int fd[2])
 {
 	m_stdout = dup(STDOUT_FILENO);
-	if (fd[1] < 0)
+	if (fd[1] == -1)
 	{
 		return;
 	}
@@ -117,7 +117,7 @@ void Command::redirectOut(int fd[2])
 void Command::redirectIn(int fd[2])
 {
 	m_stdin = dup(STDIN_FILENO);
-	if (fd[0] < 0)
+	if (fd[0] == -1)
 	{
 		return;
 	}

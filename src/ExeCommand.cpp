@@ -26,7 +26,7 @@ int ExeCommand::execute() const
 	return _execvp(program, params.data());
 #else
 	pid_t pid = fork();
-	if (pid < 0)
+	if (pid == -1)
 	{
 		std::cerr << "fork failed" << std::endl;
 		return 1;

@@ -1,5 +1,7 @@
 #include "HistoryCommand.h"
 #include <iostream>
+#include <iomanip>
+#include "HistoryManager.h"
 
 HistoryCommand::HistoryCommand(const std::vector<std::string>& params) :
     Command(CommandType::UNKNOWN, params)
@@ -7,6 +9,10 @@ HistoryCommand::HistoryCommand(const std::vector<std::string>& params) :
 
 int HistoryCommand::execute() const
 {
-    std::cout << "history not implemented" << std::endl;
+    const auto& history = HistoryManager::getInstance().getHistory();
+    for (const auto& [index, input] : history)
+    {
+        std::cout << std::setw(5) << index << "  " << input << std::endl;
+    }
     return 0;
 }

@@ -13,6 +13,7 @@
 #include "CdCommand.h"
 #include "ExeCommand.h"
 #include "HistoryCommand.h"
+#include "HistoryManager.h"
 
 const CommandsMap CommandRunner::s_commandCreators = {
 	{CommandType::EXIT, [](const std::vector<std::string>& params) {return std::make_unique<ExitCommand>(params); }},
@@ -141,7 +142,7 @@ void CommandRunner::run(const std::string& input) const
 			if (std::unique_ptr<Command> command = getCommand(currentTokens))
 			{
 				fds.emplace_back();
-				if (pipe(fds[pipeCount].data()) < 0)
+				if (pipe(fds[pipeCount].data()) == -1)
 				{
 					std::cerr << "cannot create pipe \n";
 					return;
@@ -164,6 +165,8 @@ void CommandRunner::run(const std::string& input) const
 		}
 		currentTokens.push_back(token);
 	}
+
+	HistoryManager::getInstance().append(input);
 
 	for (int i = 0; i < commands.size(); ++i)
 	{
