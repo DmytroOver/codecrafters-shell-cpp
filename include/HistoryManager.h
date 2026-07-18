@@ -5,6 +5,7 @@
 class HistoryManager
 {
     std::vector<std::pair<int, std::string>> m_history;
+    int m_currentIndex = 0;
 
     HistoryManager() = default;
 public:
@@ -14,4 +15,6 @@ public:
     static HistoryManager& getInstance();
     [[nodiscard]] const std::vector<std::pair<int, std::string>>& getHistory() const;
     void append(const std::string& input);
+    [[nodiscard]] std::string_view getPreviousCommand();
+    [[nodiscard]] std::string_view getNextCommand();
 };

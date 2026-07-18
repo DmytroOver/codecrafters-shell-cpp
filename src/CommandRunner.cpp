@@ -240,3 +240,13 @@ std::vector<std::string> CommandRunner::autocomplete(const std::string& prefix) 
 	}
 	return result;
 }
+
+std::string_view CommandRunner::getPreviousCommand() const
+{
+	return HistoryManager::getInstance().getPreviousCommand();
+}
+
+std::string_view CommandRunner::getNextCommand() const
+{
+	return HistoryManager::getInstance().getNextCommand();
+}

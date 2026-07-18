@@ -11,7 +11,7 @@
 #include <unistd.h>
 #endif
 
-std::string getInput(const CommandRunner& commandParser)
+std::string getInput(const CommandRunner& commandRunner)
 {
 #if !_WIN32
     struct termios oldt, newt;
@@ -79,10 +79,37 @@ std::string getInput(const CommandRunner& commandParser)
             }
             break;
         }
+#else
+        case '\033':
+        {
+            if (read(STDIN_FILENO, &c, 1) != -1)
+            {
+                read(STDIN_FILENO, &c, 1);
+                ch = static_cast<char>(c);
+                switch (ch)
+                {
+                case 'A':
+                    input = commandRunner.getPreviousCommand();
+                    std::cout << "\033[2K\r$ " << input << std::flush;
+                    break;
+                case'B':
+                    input = commandRunner.getNextCommand();
+                    std::cout << "\033[2K\r$ " << input << std::flush;
+                    break;
+                case 'C':
+                    break;
+                case 'D':
+                    break;
+                default:
+                    break;
+                }
+            }
+            break;
+        }
 #endif
         case '\t':
         {
-            std::vector<std::string> completionResults = commandParser.autocomplete(input);
+            std::vector<std::string> completionResults = commandRunner.autocomplete(input);
             if (completionResults.empty())
             {
                 std::cout << '\a' << std::flush;
