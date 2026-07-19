@@ -32,6 +32,11 @@ CommandRunner::CommandRunner()
 	{
 		m_commandsTrie.insert(pair.first);
 	}
+	const char* historyFile = std::getenv("HISTFILE");
+	if (historyFile)
+	{
+		HistoryManager::getInstance().readHistoryFromFile(historyFile);
+	}
 }
 
 std::vector<std::string> CommandRunner::getTokens(const std::string& input) const

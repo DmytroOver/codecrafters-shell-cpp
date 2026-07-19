@@ -18,7 +18,7 @@ void HistoryManager::append(const std::string& input)
 {
     const int index = !m_history.empty() ? m_history.back().first : 0;
     m_history.emplace_back(index + 1, input);
-    m_currentIndex = m_history.size();
+    m_currentIndex = static_cast<int>(m_history.size());
 }
 
 std::string_view HistoryManager::getPreviousCommand()
@@ -61,6 +61,7 @@ void HistoryManager::readHistoryFromFile(const fs::path& filename)
         m_history.emplace_back(++index, line);
     }
     m_appendedIndex = m_history.size();
+    m_currentIndex = static_cast<int>(m_history.size());
 }
 
 void HistoryManager::writeHistoryToFile(const fs::path& filename) const
