@@ -9,6 +9,7 @@ class HistoryManager
 {
     std::vector<std::pair<int, std::string>> m_history;
     int m_currentIndex = 0;
+    mutable size_t m_appendedIndex = 0;
 
     HistoryManager() = default;
 public:
@@ -22,4 +23,5 @@ public:
     [[nodiscard]] std::string_view getNextCommand();
     void readHistoryFromFile(const fs::path& filename);
     void writeHistoryToFile(const fs::path& filename) const;
+    void appendHistoryToFile(const fs::path& filename) const;
 };

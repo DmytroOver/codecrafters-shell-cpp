@@ -60,6 +60,7 @@ void HistoryManager::readHistoryFromFile(const fs::path& filename)
     {
         m_history.emplace_back(++index, line);
     }
+    m_appendedIndex = m_history.size();
 }
 
 void HistoryManager::writeHistoryToFile(const fs::path& filename) const
@@ -69,4 +70,15 @@ void HistoryManager::writeHistoryToFile(const fs::path& filename) const
     {
         file << line << std::endl;
     }
+    m_appendedIndex = m_history.size();
+}
+
+void HistoryManager::appendHistoryToFile(const fs::path& filename) const
+{
+    std::ofstream file{filename, std::ios::app};
+    for (const auto& line : m_history | std::views::drop(m_appendedIndex) | std::views::values)
+    {
+        file << line << std::endl;
+    }
+    m_appendedIndex = m_history.size();
 }
