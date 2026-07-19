@@ -13,14 +13,21 @@ int HistoryCommand::execute() const
     int n = 0;
     if (m_params.size() > 1)
     {
-        if (m_params[1] == "-r")
+        if (m_params[1] == "-r" || m_params[1] == "-w")
         {
             if (m_params.size() < 3)
             {
-                std::cerr << "usage: history [<n>] [-r <path_to_history_file>]" << std::endl;
+                std::cerr << "usage: history [<n>] [-r <path_to_input_file>] [-w <path_to_output_file>]" << std::endl;
                 return 1;
             }
-            HistoryManager::getInstance().readHistoryFromFile(m_params[2]);
+            if (m_params[1] == "-r")
+            {
+                HistoryManager::getInstance().readHistoryFromFile(m_params[2]);
+            }
+            else if (m_params[1] == "-w")
+            {
+                HistoryManager::getInstance().writeHistoryToFile(m_params[2]);
+            }
             return 0;
         }
         n = std::atoi(m_params[1].c_str());

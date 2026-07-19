@@ -1,6 +1,7 @@
 #include "HistoryManager.h"
 
 #include <fstream>
+#include <ranges>
 
 HistoryManager& HistoryManager::getInstance()
 {
@@ -58,5 +59,14 @@ void HistoryManager::readHistoryFromFile(const fs::path& filename)
     while (std::getline(file, line) && !line.empty())
     {
         m_history.emplace_back(++index, line);
+    }
+}
+
+void HistoryManager::writeHistoryToFile(const fs::path& filename) const
+{
+    std::ofstream file{filename, std::ios::out};
+    for (const auto& line : m_history | std::views::values)
+    {
+        file << line << std::endl;
     }
 }

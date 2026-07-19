@@ -21,4 +21,5 @@ public:
     [[nodiscard]] std::string_view getPreviousCommand();
     [[nodiscard]] std::string_view getNextCommand();
     void readHistoryFromFile(const fs::path& filename);
+    void writeHistoryToFile(const fs::path& filename) const;
 };
