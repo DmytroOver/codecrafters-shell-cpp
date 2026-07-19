@@ -10,7 +10,22 @@ HistoryCommand::HistoryCommand(const std::vector<std::string>& params) :
 
 int HistoryCommand::execute() const
 {
-    int n = m_params.size() > 1 ? std::atoi(m_params[1].c_str()) : 0;
+    int n = 0;
+    if (m_params.size() > 1)
+    {
+        if (m_params[1] == "-r")
+        {
+            if (m_params.size() < 3)
+            {
+                std::cerr << "usage: history [<n>] [-r <path_to_history_file>]" << std::endl;
+                return 1;
+            }
+            HistoryManager::getInstance().readHistoryFromFile(m_params[2]);
+            return 0;
+        }
+        n = std::atoi(m_params[1].c_str());
+    }
+
     const auto& history = HistoryManager::getInstance().getHistory();
     int drop = n > 0 ? history.size() - n : 0;
 

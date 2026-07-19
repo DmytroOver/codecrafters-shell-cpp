@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 class HistoryManager
 {
@@ -17,4 +20,5 @@ public:
     void append(const std::string& input);
     [[nodiscard]] std::string_view getPreviousCommand();
     [[nodiscard]] std::string_view getNextCommand();
+    void readHistoryFromFile(const fs::path& filename);
 };

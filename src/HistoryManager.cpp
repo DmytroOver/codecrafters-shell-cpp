@@ -1,5 +1,7 @@
 #include "HistoryManager.h"
 
+#include <fstream>
+
 HistoryManager& HistoryManager::getInstance()
 {
     static HistoryManager instance;
@@ -38,4 +40,23 @@ std::string_view HistoryManager::getNextCommand()
     }
 
     return m_history[m_currentIndex].second;
+}
+
+void HistoryManager::readHistoryFromFile(const fs::path& filename)
+{
+    if (filename.empty())
+    {
+        return;
+    }
+    std::ifstream file{filename};
+    if (!file.is_open())
+    {
+        return;
+    }
+    int index = !m_history.empty() ? m_history.back().first : 0;
+    std::string line;
+    while (std::getline(file, line) && !line.empty())
+    {
+        m_history.emplace_back(++index, line);
+    }
 }
